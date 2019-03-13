@@ -1,0 +1,10 @@
+---
+  - hosts: all
+    any_errors_fatal: true
+    name: "Configure Package Repositories"
+    become: yes
+    vars_files:
+      - group_vars/defaults.yaml
+
+    roles:
+      - role: packages-repo

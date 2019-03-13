@@ -1,0 +1,13 @@
+---
+# Contains list of playbooks to setup a HA enterprise ready kubernetes cluster
+- include: _all.yaml
+- include: _packages-repo.yaml
+# docker
+- include: _docker.yaml
+# kubernetes
+- include: _packages-kubernetes.yaml
+- include: _kubeadm-control-plane.yaml
+- include: _kubeadm-nodes.yaml
+# addons
+- include: _addons.yaml
+- include: _artifacts.yaml

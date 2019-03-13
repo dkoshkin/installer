@@ -1,0 +1,31 @@
+---
+
+  - name: check if kubeadm has already run
+    stat:
+      path: "/var/lib/kubelet/config.yaml"
+    register: kubeadm_already_run
+
+  - block:
+    - name: create a new bootstrap token
+      command: kubeadm token create --print-join-command
+      delegate_to: "{{ groups['control-plane'][0] }}"
+      register: join_command_result
+
+    - name: extract bootstrap token and CA hash
+      set_fact:
+        bootstrap_token: "{{ join_command_result.stdout | regex_search(token_regexp, '\\2') | first }}"
+        bootstrap_ca_hash: "{{ join_command_result.stdout | regex_search(ca_hash_regexp, '\\2') | first }}"
+      vars:
+        token_regexp: '([^\s]+\s){4}([^\s]+)'
+        ca_hash_regexp: '([^\s]+\s){6}([^\s]+)'
+
+    - name: run kubeadm join
+      command: kubeadm join {{ controlPlane.apiServerEndpoint }} --token {{ bootstrap_token }} --discovery-token-ca-cert-hash {{ bootstrap_ca_hash }}
+
+    when:
+      - not kubeadm_already_run.stat.exists
+
+    always:
+      - name: delete bootstrap token
+        command: kubeadm token delete {{ bootstrap_token }}
+        delegate_to: "{{ groups['control-plane'][0] }}"

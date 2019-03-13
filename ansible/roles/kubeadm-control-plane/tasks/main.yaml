@@ -1,0 +1,13 @@
+---
+
+  - name: check if kubeadm has already run
+    stat:
+      path: "/var/lib/kubelet/config.yaml"
+    register: kubeadm_already_run
+
+  - name: run kubeadm init
+    command: kubeadm init --skip-token-print --pod-network-cidr={{ networking.podCidr }}
+    when:
+      - not kubeadm_already_run.stat.exists
+
+

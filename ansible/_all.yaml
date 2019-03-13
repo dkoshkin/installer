@@ -1,0 +1,19 @@
+---
+  - hosts: all
+    any_errors_fatal: true
+    name: "Configure Cluster Prerequisites"
+    gather_facts: no
+    become: yes
+    vars_files:
+      - group_vars/defaults.yaml
+
+    roles:
+      - all
+
+  # Force fact gathering once the nodes have been bootstrapped
+  - hosts: all
+    name: "Gather Node Facts"
+    gather_facts: yes
+    vars_files:
+        - group_vars/defaults.yaml
+    tasks: []

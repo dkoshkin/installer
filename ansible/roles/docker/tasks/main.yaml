@@ -1,0 +1,16 @@
+---
+  - name: create /etc/docker directory
+    file:
+      path: /etc/docker
+      state: directory
+
+  # start and verify that Docker installed successfully and is running
+  - name: start docker service
+    service:
+      name: docker
+      state: started
+      enabled: yes
+
+  - name: verify docker is running
+    command: docker ps
+    changed_when: False

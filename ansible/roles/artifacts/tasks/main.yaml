@@ -1,0 +1,10 @@
+---
+
+  - name: fetch admin kubeconfig
+    fetch:
+      src: /etc/kubernetes/admin.conf
+      dest: "{{ install_directory }}/admin.conf"
+      mode: 0640
+      flat: yes
+    become: no
+    run_once: yes

@@ -1,0 +1,18 @@
+---
+
+  - name: create addons directory
+    file:
+      path: "/etc/kubernetes/addons"
+      state: directory
+
+  - name: copy addons to remote
+    template:
+      src: "{{ item }}"
+      dest: "/etc/kubernetes/addons/{{ item }}"
+    with_items:
+      - calico.yaml
+
+  - name: create addons
+    command: kubectl apply --kubeconfig /etc/kubernetes/admin.conf -f /etc/kubernetes/addons/{{ item }}
+    with_items:
+      - calico.yaml

@@ -1,0 +1,24 @@
+---
+
+  # YUM
+  - name: install docker-ce rpm package
+    command: yum install -y docker-ce-{{ package_versions.docker_rpm }}
+    register: docker_installation_rpm
+    until: docker_installation_rpm|success
+    retries: 3
+    delay: 3
+    when: ansible_os_family == 'RedHat'
+    environment: "{{proxy_env}}"
+
+  # DEB
+  - name: install docker-ce deb package
+    apt:
+      name: docker-ce={{ package_versions.docker_deb }}
+      state: present
+      default_release: xenial
+    register: docker_installation_deb
+    until: docker_installation_deb|success
+    retries: 3
+    delay: 3
+    when: ansible_os_family == 'Debian'
+    environment: "{{proxy_env}}"

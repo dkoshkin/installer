@@ -1,0 +1,11 @@
+---
+  - hosts: control-plane[0]
+    any_errors_fatal: true
+    name: "{{ play_name | default('Install Addons') }}"
+    serial: 1
+    become: yes
+    vars_files:
+      - group_vars/defaults.yaml
+
+    roles:
+      - role: addons

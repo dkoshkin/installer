@@ -1,0 +1,11 @@
+---
+  - hosts: all
+    any_errors_fatal: true
+    name: "{{ play_name | default('Install Kubernetes Packages') }}"
+    serial: "{{ serial_count | default('100%') }}"
+    become: yes
+    vars_files:
+      - group_vars/defaults.yaml
+
+    roles:
+      - role: packages-kubernetes

@@ -1,0 +1,26 @@
+clusterName:
+
+versions:
+  kubernetes: 1.13.4
+  docker: 18.06.3
+
+networking:
+  podCidr: 192.168.0.0/16
+  httpProxy:
+  httpsProxy:
+  noProxy:
+
+ssh:
+  user: root
+  privateKeyFile: ~/.ssh/do
+  port: 22
+
+controlPlane:
+  apiServerEndpoint: 142.93.242.23:6443
+
+all:
+  control-plane:
+    hosts:
+      ubuntu-s-2vcpu-4gb-nyc1-01:
+        ansible_host: 42.93.242.23
+
